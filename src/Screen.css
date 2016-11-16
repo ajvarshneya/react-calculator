@@ -1,0 +1,8 @@
+.Screen {
+    font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 100;
+    font-size: 3.0em;
+    position: absolute;
+    bottom: 0px;
+    right: 15px;
+}
