@@ -11,9 +11,9 @@ class Button extends Component {
             minHeight: "45px"
         };
         return (
-            <th colSpan={this.props.colSpan} style={cellStyle}>
-                <div className="Button">
-                    {this.props.digit}
+            <th className="clickable" colSpan={this.props.colSpan} style={cellStyle}>
+                <div className="Button darken" onClick={this.props.handler}>
+                    {this.props.text}
                 </div>
             </th>
         )

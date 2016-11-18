@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import './Screen.css';
 
 class Screen extends Component {
-    
     render() {
         var cellStyle = {
             backgroundColor: this.props.bgcolor,

@@ -1,9 +1,23 @@
 .App {
 	display: table;
 	margin: 100px auto;
+    cursor: default;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Chrome/Safari/Opera */
+    -khtml-user-select: none; /* Konqueror */
+    -moz-user-select: none;  /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                        not supported by any browser */
 }
 
-table, th, td {
+table {
+    border: 1px solid #8d8d8d;
+    border-collapse: collapse;
+    background-color: #000000;
+}
+
+th, td {
 	border: 1px solid #8d8d8d;
 	border-collapse: collapse;
 }
