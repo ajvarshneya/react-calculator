@@ -20,7 +20,6 @@ function add() {
     digits = false;
 
     operation = 0;
-
     return value;
 };
 
@@ -61,16 +60,6 @@ function divide() {
     return value;
 };
 
-function plusMinus() {
-    if (digits) {
-        current *= -1;
-    } else {
-        value *= -1;
-    }
-
-    return current;
-};
-
 function percent() {
     if (digits) {
         value = compute();
@@ -81,6 +70,16 @@ function percent() {
 
     operation = 4;
     return value;
+};
+
+function plusMinus() {
+    if (digits) {
+        current *= -1;
+    } else {
+        value *= -1;
+    }
+
+    return current;
 };
 
 function decimal() {
@@ -94,7 +93,7 @@ function ac() {
 };
 
 function result() {
-    compute();
+    value = compute();
     digits = false;
 
     return value;
