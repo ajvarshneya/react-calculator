@@ -38,7 +38,6 @@ function subtract() {
 function multiply() {
     if (digits) {
         value = compute();
-        console.log(value);
     }
 
     current = 0;
@@ -75,11 +74,11 @@ function percent() {
 function plusMinus() {
     if (digits) {
         current *= -1;
+        return current;
     } else {
         value *= -1;
+        return value;
     }
-
-    return current;
 };
 
 function decimal() {
@@ -89,10 +88,13 @@ function decimal() {
 function ac() {
     value = 0;
     current = 0;
+    operation = 0;
+    decimal = 0;
+    digits = false;
     return value;
 };
 
-function result() {
+function equals() {
     value = compute();
     digits = false;
 
@@ -127,5 +129,5 @@ export {
     percent,
     decimal,
     ac,
-    result
+    equals
 };

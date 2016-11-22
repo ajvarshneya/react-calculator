@@ -8,8 +8,10 @@ class Screen extends Component {
             color: this.props.color,
             minWidth: "55px",
             minHeight: "45px",
-            position: "relative"
+            position: "relative",
+            fontSize: this.props.fontSize
         };
+
         return (
             <th colSpan="4" style={cellStyle}>
                 <div className="Screen">

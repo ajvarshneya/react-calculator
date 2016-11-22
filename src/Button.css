@@ -12,3 +12,7 @@
 .clickable:active {
     opacity: 0.8;
 }
+
+.darken {
+    opacity: 0.8;
+}
