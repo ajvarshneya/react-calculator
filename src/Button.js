@@ -5,6 +5,7 @@ import './Button.css';
 
 class Button extends Component {
 
+    // Triggered by keybinds
     triggerClick() {
         $('#' + this.props.id).click();
     }

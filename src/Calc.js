@@ -1,133 +1,213 @@
-var value = 0;
-var current = 0;
-var operation = 0;
-var decimal = 0;
-var digits = false;
 
-function digit(num) {
-    digits = true;
-    current = 10 * current + num;
+var token = '';
+var operandStack = [];
+var operatorStack = [];
 
-    return current;
+var lastOperator = '';
+var lastOperand = 0;
+
+var precedence = {
+    '+' : 1,
+    '-' : 1,
+    '*' : 2,
+    '/' : 2
 }
 
-function add() {
-    if (digits) {
-        value = compute();
+Number.prototype.format = function() {
+    // Handle exponentials
+    if (Math.abs(this) >= 1e16 || 
+        (Math.abs(this) <= 1e-16 && this != 0)) {
+        return this.toExponential().toString();
     }
 
-    current = 0;
-    digits = false;
-
-    operation = 0;
-    return value;
-};
-
-function subtract() {
-    if (digits) {
-        value = compute();
+    var str = this.toString();
+    var decimalLength = 0;
+    var decimalIndex = str.indexOf('.');
+    if (decimalIndex != -1) {
+        decimalLength = str.substring(decimalIndex).length;
     }
 
-    current = 0;
-    digits = false;
-
-    operation = 1;
-    return value;
-};
-
-function multiply() {
-    if (digits) {
-        value = compute();
-    }
-
-    current = 0;
-    digits = false;
-
-    operation = 2;
-    return value;
-};
-
-function divide() {
-    if (digits) {
-        value = compute();
-    }
-
-    current = 0;
-    digits = false;
-
-    operation = 3;
-    return value;
-};
-
-function percent() {
-    if (digits) {
-        value = compute();
-    }
-
-    current = 0;
-    digits = false;
-
-    operation = 4;
-    return value;
-};
-
-function plusMinus() {
-    if (digits) {
-        current *= -1;
-        return current;
+    if (decimalLength >= 17) {
+        return this.toFixed(15).toString();
     } else {
-        value *= -1;
-        return value;
+        return this.toString();
     }
+}
+
+Array.prototype.top = function() {
+    return this[this.length - 1];
+}
+
+function putSymbol(symbol) {
+
+    // Handle decimals / other symbol collection
+    if (symbol != '.' || 
+       (symbol == '.' && token.indexOf('.') == -1)) {
+        token += symbol;
+    }
+
+    // Don't round if decimal at end of string
+    if (token.charAt(token.length - 1) == '.') {
+        return token;
+    }
+
+    // Round and return
+    return parseFloat(token).format();
+}
+
+function handleOp(operator) {
+    // Push current token to output queue, reset it
+    if (token != '') {
+        operandStack.push(token);
+        token = '';
+    }
+
+    // Compute if precedence less than previous operator
+    if (precedence[operator] <= precedence[operatorStack.top()]) {
+        compute();
+    }
+
+    // Push operator to stack
+    operatorStack.push(operator);
+
+    return parseFloat(operandStack.top()).format();
+}
+
+function handleAdd() {
+    return handleOp('+');
 };
 
-function decimal() {
-    return value;
+function handleSubtract() {
+    return handleOp('-');
 };
 
-function ac() {
-    value = 0;
-    current = 0;
-    operation = 0;
-    decimal = 0;
-    digits = false;
-    return value;
+function handleMultiply() {
+    return handleOp('*');
 };
 
-function equals() {
-    value = compute();
-    digits = false;
+function handleDivide() {
+    return handleOp('/');
+};
 
-    return value;
+function handlePercent() {
+    // Push current token to operand stack
+    if (token != '') {
+        operandStack.push(token);
+        token = '';
+    }
+
+    // Handle start state
+    if (operandStack.length == 0) {
+        return 0;
+    }
+
+    // Divide by 100
+    var operand = parseFloat(operandStack.pop());
+    operand /= 100;
+    operandStack.push(operand);
+    return operand;
+};
+
+function handlePlusMinus() {
+    // Push current token to operand stack
+    if (token != '') {
+        operandStack.push(token);
+        token = '';
+    }
+
+    // Handle start state
+    if (operandStack.length == 0) {
+        return 0;
+    }
+
+    // Negate
+    var operand = parseFloat(operandStack.pop());
+    operand *= -1;
+    operandStack.push(operand);
+    return operand;
+};
+
+function handleAllClear() {
+    token = '';
+    operandStack = [];
+    operatorStack = [];
+    lastOperator = '';
+    lastOperand = 0;
+
+    return 0;
+};
+
+function handleClear() {
+
+};
+
+function handleEquals() {
+    if (token != '') {
+        // Push current token to operand stack
+        operandStack.push(token);
+        token = '';
+
+        // Compute until there are no more operators
+        while (operatorStack.length > 0) {
+            compute();
+        }
+    } else {
+        if (lastOperand != '' && lastOperator != '') {
+            // Repeat last operation
+            operandStack.push(lastOperand);
+            operatorStack.push(lastOperator);
+            compute();
+        }
+    }
+
+    // Return the resulting top of stack
+    return parseFloat(operandStack.top()).format();
 };
 
 function compute() {
-    switch (operation) {
-        case 0:
-            return value + current;
-        case 1:
-            return value - current;
-        case 2:
-            return value * current;
-        case 3:
-            return value / current;
-        case 4:
-            return value / 100;
-        default:
-            return 0;
+    // Pop operator from stack
+    var operator = operatorStack.pop();
+
+    // Retrieve operands
+    var op1 = parseFloat(operandStack.pop());
+    var op2 = parseFloat(operandStack.pop());
+
+    // Compute
+    var result = 0;
+    switch(operator) {
+        case '+':
+            result = op2 + op1;
+            break;
+        case '-':
+            result = op2 - op1;
+            break;
+        case '*':
+            result = op2 * op1;
+            break;
+        case '/':
+            result = op2 / op1;
+            break;
     }
+
+    console.log(result);
+
+    // Put result on top of queue
+    operandStack.push(result.toString());
+
+    // Save operator/operand for repeat operation
+    lastOperator = operator;
+    lastOperand = op1.toString();
 }
 
 export {
-    value,
-    digit,
-    add,
-    subtract,
-    multiply,
-    divide,
-    plusMinus,
-    percent,
-    decimal,
-    ac,
-    equals
+    putSymbol,
+    handleAdd,
+    handleSubtract,
+    handleMultiply,
+    handleDivide,
+    handlePlusMinus,
+    handlePercent,
+    handleAllClear,
+    handleClear,
+    handleEquals
 };
