@@ -189,8 +189,6 @@ function compute() {
             break;
     }
 
-    console.log(result);
-
     // Put result on top of queue
     operandStack.push(result.toString());
 

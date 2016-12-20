@@ -23,7 +23,7 @@ class App extends Component {
 		var fontSize = 50;
 		var length = result.toString().length;
 		if (length > 7) {
-			fontSize = 50 * Math.pow(0.92, length - 7);
+			fontSize = 50 * Math.pow(0.91, length - 7);
 			console.log(length);
 			console.log(fontSize);
 		}
@@ -45,7 +45,7 @@ class App extends Component {
 		var fontSize = 50;
 		var length = result.toString().length;
 		if (length > 7) {
-			fontSize = 50 * Math.pow(0.92, length - 7);
+			fontSize = 50 * Math.pow(0.91, length - 7);
 			console.log(length);
 			console.log(fontSize);
 		}
