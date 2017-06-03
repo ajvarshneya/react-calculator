@@ -1,5 +1,5 @@
 .Screen {
-    font-family: "Helvetica Neue", Helvetica, "Lucida Grande", sans-serif; 
+    font-family: "Helvetica Neue", HelveticaNeue, "TeX Gyre Heros", TeXGyreHeros, FreeSans, "Nimbus Sans L", "Liberation Sans", Arimo, Helvetica, Arial, sans-serif; 
     font-weight: 100;
     position: absolute;
     bottom: 0px;
